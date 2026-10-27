@@ -1,0 +1,26 @@
+# Environment variables (NEVER COMMIT THESE)
+.env
+.env.local
+.env.*.local
+PRIVATE_KEY
+
+# Python Virtual Environment
+venv/
+__pycache__/
+*.pyc
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+build/
+npm-debug.log*
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+
+# OS Files
+.DS_Store
+Thumbs.db
