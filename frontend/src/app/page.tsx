@@ -6,31 +6,29 @@ import { parseUnits, formatUnits } from 'viem';
 import { baseSepolia } from 'wagmi/chains';
 import EnergyMarketABI from '../abis/EnergyMarket.json';
 import MockUSDCABI from '../abis/MockUSDC.json';
+import SolarAssetABI from '../abis/SolarAsset.json';
 
-const MARKET_ADDRESS = '0x6309C657B4fc06B39Ac9Bcb040156898A4F23629';
-const USDC_ADDRESS = '0xb4FD99d390683DFA2eAE95EbcdDDAa6CF786edc7';
+const MARKET_ADDRESS = '0x686bb8E39920E19d5e028363e872b1C979426e73';
+const USDC_ADDRESS = '0x890e52B20C0845bde17cb0E30Ea715d3c2610C0f';
+const ASSET_ADDRESS = '0xDc568e95b763e226A56872E0887d4dc04608Dd89';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<'operator' | 'consumer' | 'admin'>('operator');
-  const [deviceId, setDeviceId] = useState('');
-  const [location, setLocation] = useState('');
+  const [activeTab, setActiveTab] = useState<'operator' | 'consumer' | 'admin'>('admin');
+  const [deviceId, setDeviceId] = useState('SHS-LAGOS-001');
+  const [location, setLocation] = useState('Lagos, Nigeria');
+  const [assetTokenId, setAssetTokenId] = useState('0');
   const [payAmount, setPayAmount] = useState('');
   const [genAmount, setGenAmount] = useState('');
 
-  // 1. Fix the hydration error
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
-  // Wallet connection
   const { address, isConnected, chain } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const { writeContract } = useWriteContract();
   const { switchChain } = useSwitchChain();
 
-  // Read Operator Balance
   const { data: operatorBalance } = useReadContract({
     address: MARKET_ADDRESS,
     abi: EnergyMarketABI.abi,
@@ -47,14 +45,33 @@ export default function Home() {
     return true;
   };
 
+  const handleMintAsset = () => {
+    if (!ensureCorrectNetwork()) return;
+    writeContract({
+      address: ASSET_ADDRESS,
+      abi: SolarAssetABI.abi,
+      functionName: 'mintAsset',
+      args: [address, "ipfs://QmMockDocumentHashForLegalDeed"],
+    });
+  };
+
+  const handleAllowlist = () => {
+    if (!ensureCorrectNetwork()) return;
+    writeContract({
+      address: MARKET_ADDRESS,
+      abi: EnergyMarketABI.abi,
+      functionName: 'setAllowlist',
+      args: [address, true],
+    });
+  };
+
   const handleRegister = () => {
     if (!ensureCorrectNetwork()) return;
-    if (!deviceId || !location) return alert('Please fill out all fields');
     writeContract({
       address: MARKET_ADDRESS,
       abi: EnergyMarketABI.abi,
       functionName: 'registerDevice',
-      args: [deviceId, location],
+      args: [deviceId, location, BigInt(assetTokenId)],
     });
   };
 
@@ -70,13 +87,11 @@ export default function Home() {
 
   const handlePay = () => {
     if (!ensureCorrectNetwork()) return;
-    if (!deviceId || !payAmount) return alert('Please fill out all fields');
-    const amount = parseUnits(payAmount, 6);
     writeContract({
       address: MARKET_ADDRESS,
       abi: EnergyMarketABI.abi,
       functionName: 'purchaseEnergy',
-      args: [deviceId, amount],
+      args: [deviceId, parseUnits(payAmount, 6)],
     });
   };
 
@@ -91,7 +106,6 @@ export default function Home() {
 
   const handleSimulateOracle = () => {
     if (!ensureCorrectNetwork()) return;
-    if (!deviceId || !genAmount) return alert('Please fill out all fields');
     writeContract({
       address: MARKET_ADDRESS,
       abi: EnergyMarketABI.abi,
@@ -100,103 +114,75 @@ export default function Home() {
     });
   };
 
-  // Prevent rendering the wallet UI until the browser is ready
   if (!mounted) return null;
 
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100 font-sans selection:bg-emerald-500/30">
-      {/* Header */}
       <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black">
-              ⚡
-            </div>
-            <h1 className="text-xl font-semibold tracking-tight">SHS DePIN Network</h1>
-          </div>
-          
+          <h1 className="text-xl font-semibold tracking-tight text-emerald-400">⚡ SHS DePIN Network</h1>
           {isConnected ? (
             <div className="flex items-center gap-4">
-              {chain?.id !== baseSepolia.id ? (
-                <button 
-                  onClick={() => switchChain({ chainId: baseSepolia.id })} 
-                  className="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-lg animate-pulse"
-                >
-                  ⚠️ Switch to Base Sepolia
-                </button>
-              ) : (
-                <span className="text-sm font-mono text-emerald-400">
-                  {address?.slice(0, 6)}...{address?.slice(-4)}
-                </span>
-              )}
-              <button onClick={() => disconnect()} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
-                Disconnect
-              </button>
+              <span className="text-sm font-mono text-emerald-400">{address?.slice(0, 6)}...{address?.slice(-4)}</span>
+              <button onClick={() => disconnect()} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-4 py-2 rounded-lg">Disconnect</button>
             </div>
           ) : (
-            <button 
-              onClick={() => connect({ connector: connectors[0] })}
-              className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-4 py-2 rounded-lg transition-colors"
-            >
-              Connect Wallet
-            </button>
+            <button onClick={() => connect({ connector: connectors[0] })} className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-4 py-2 rounded-lg">Connect Wallet</button>
           )}
         </div>
       </header>
 
-      {/* Main Content (Rest of the UI remains exactly the same) */}
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl">
-            <p className="text-gray-400 text-sm mb-1">Total Energy Generated</p>
-            <p className="text-3xl font-bold text-white">1,420 <span className="text-lg text-emerald-500">kWh</span></p>
-          </div>
-          <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl">
-            <p className="text-gray-400 text-sm mb-1">Active Devices</p>
-            <p className="text-3xl font-bold text-white">42 <span className="text-lg text-emerald-500">Nodes</span></p>
-          </div>
-          <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl">
-            <p className="text-gray-400 text-sm mb-1">Total Rewards Distributed</p>
-            <p className="text-3xl font-bold text-white">$8,500 <span className="text-lg text-emerald-500">USDC</span></p>
-          </div>
-        </div>
-
         <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
           <div className="flex border-b border-gray-800">
-            <button onClick={() => setActiveTab('operator')} className={`flex-1 py-4 text-center font-medium transition-colors ${activeTab === 'operator' ? 'bg-gray-800/50 text-emerald-400 border-b-2 border-emerald-400' : 'text-gray-400 hover:text-gray-200'}`}>
-              Operator (Supply)
-            </button>
-            <button onClick={() => setActiveTab('consumer')} className={`flex-1 py-4 text-center font-medium transition-colors ${activeTab === 'consumer' ? 'bg-gray-800/50 text-emerald-400 border-b-2 border-emerald-400' : 'text-gray-400 hover:text-gray-200'}`}>
-              Consumer (Demand)
-            </button>
-            <button onClick={() => setActiveTab('admin')} className={`flex-1 py-4 text-center font-medium transition-colors ${activeTab === 'admin' ? 'bg-gray-800/50 text-red-400 border-b-2 border-red-400' : 'text-gray-400 hover:text-gray-200'}`}>
-              Oracle Simulator (Admin)
-            </button>
+            <button onClick={() => setActiveTab('admin')} className={`flex-1 py-4 font-medium ${activeTab === 'admin' ? 'bg-gray-800/50 text-red-400 border-b-2 border-red-400' : 'text-gray-400'}`}>1. Admin Setup (Oracle)</button>
+            <button onClick={() => setActiveTab('operator')} className={`flex-1 py-4 font-medium ${activeTab === 'operator' ? 'bg-gray-800/50 text-emerald-400 border-b-2 border-emerald-400' : 'text-gray-400'}`}>2. Operator (Supply)</button>
+            <button onClick={() => setActiveTab('consumer')} className={`flex-1 py-4 font-medium ${activeTab === 'consumer' ? 'bg-gray-800/50 text-emerald-400 border-b-2 border-emerald-400' : 'text-gray-400'}`}>3. Consumer (Demand)</button>
           </div>
 
           <div className="p-8">
+            {activeTab === 'admin' && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold mb-2 text-red-400">Admin Setup (RWA Compliance)</h2>
+                  <p className="text-gray-400 mb-4">Mint the Asset NFT and Allowlist the operator before they can register.</p>
+                  <div className="flex gap-4">
+                    <button onClick={handleMintAsset} className="bg-red-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-500">1. Mint Asset NFT</button>
+                    <button onClick={handleAllowlist} className="bg-red-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-500">2. Allowlist Operator</button>
+                  </div>
+                </div>
+                <hr className="border-gray-800" />
+                <div>
+                  <h3 className="text-lg font-bold mb-4">Simulate IoT Oracle Data</h3>
+                  <div className="flex gap-4">
+                    <input type="text" placeholder="Device ID" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1" />
+                    <input type="number" placeholder="kWh" value={genAmount} onChange={(e) => setGenAmount(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 w-32" />
+                    <button onClick={handleSimulateOracle} className="bg-white text-black font-semibold px-6 py-2 rounded-lg">Push Data</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'operator' && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Register Your Solar System</h2>
-                  <p className="text-gray-400 mb-4">Add your physical hardware to the network to start earning USDC.</p>
+                  <h2 className="text-2xl font-bold mb-2">Register Solar Asset</h2>
+                  <p className="text-gray-400 mb-4">Enter your Device ID and the NFT Token ID you own.</p>
                   <div className="flex gap-4">
-                    <input type="text" placeholder="Device ID (e.g., SHS-LAGOS-001)" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:border-emerald-500" />
-                    <input type="text" placeholder="Location (e.g., Lagos, Nigeria)" value={location} onChange={(e) => setLocation(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:border-emerald-500" />
-                    <button onClick={handleRegister} className="bg-white text-black font-semibold px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors">Register</button>
+                    <input type="text" placeholder="Device ID" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1" />
+                    <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1" />
+                    <input type="number" placeholder="NFT ID" value={assetTokenId} onChange={(e) => setAssetTokenId(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 w-24" />
+                    <button onClick={handleRegister} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg">Register</button>
                   </div>
                 </div>
                 <hr className="border-gray-800" />
                 <div className="flex justify-between items-center">
                   <div>
                     <h3 className="text-lg font-bold">Pending Rewards</h3>
-                    <p className="text-gray-400">Your unclaimed USDC balance.</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-2xl font-mono font-bold text-emerald-400">
-                      {operatorBalance ? formatUnits(operatorBalance as bigint, 6) : '0.00'} USDC
-                    </span>
-                    <button onClick={handleWithdraw} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg hover:bg-emerald-400 transition-colors">Withdraw</button>
+                    <span className="text-2xl font-mono font-bold text-emerald-400">{operatorBalance ? formatUnits(operatorBalance as bigint, 6) : '0.00'} USDC</span>
+                    <button onClick={handleWithdraw} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg">Withdraw</button>
                   </div>
                 </div>
               </div>
@@ -206,27 +192,11 @@ export default function Home() {
               <div className="space-y-6">
                 <div>
                   <h2 className="text-2xl font-bold mb-2">Purchase Energy</h2>
-                  <p className="text-gray-400 mb-4">Pay for reliable solar energy using USDC.</p>
                   <div className="flex gap-4">
-                    <input type="text" placeholder="Device ID to pay (e.g., SHS-LAGOS-001)" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:border-emerald-500" />
-                    <input type="number" placeholder="Amount (USDC)" value={payAmount} onChange={(e) => setPayAmount(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 w-32 focus:outline-none focus:border-emerald-500" />
-                    <button onClick={handleApprove} className="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-500 transition-colors">Approve</button>
-                    <button onClick={handlePay} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg hover:bg-emerald-400 transition-colors">Pay Now</button>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">* You must click Approve once before you can Pay.</p>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'admin' && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-2xl font-bold mb-2 text-red-400">Simulate IoT Oracle</h2>
-                  <p className="text-gray-400 mb-4">Inject simulated solar generation data on-chain. (Only the contract owner can do this).</p>
-                  <div className="flex gap-4">
-                    <input type="text" placeholder="Device ID (e.g., SHS-LAGOS-001)" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:border-red-500" />
-                    <input type="number" placeholder="kWh Generated" value={genAmount} onChange={(e) => setGenAmount(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 w-32 focus:outline-none focus:border-red-500" />
-                    <button onClick={handleSimulateOracle} className="bg-red-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-500 transition-colors">Push Data</button>
+                    <input type="text" placeholder="Device ID" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 flex-1" />
+                    <input type="number" placeholder="Amount (USDC)" value={payAmount} onChange={(e) => setPayAmount(e.target.value)} className="bg-gray-950 border border-gray-700 rounded-lg px-4 py-2 w-32" />
+                    <button onClick={handleApprove} className="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg">Approve</button>
+                    <button onClick={handlePay} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg">Pay</button>
                   </div>
                 </div>
               </div>
