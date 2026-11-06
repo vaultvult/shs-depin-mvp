@@ -1,3 +1,6 @@
+# SHS DePIN Network
+
+A decentralized physical infrastructure network (DePIN) MVP built for the W3Node Hackathon. This protocol enables peer-to-peer energy trading and incentivization for Solar Home Systems (SHS) in Africa.
 
 ## 📚 Documentation
 * [Project Concept & Business Model](CONCEPT.md)
@@ -13,6 +16,6 @@ graph TD
     B -->|Splits Rewards| E[Operator Wallet]
     E -->|Withdraw| F[External Cash/Mobile Money]
     
-    subgraph Base Sepolia Testnet
+    subgraph "Base Sepolia Testnet"
     B
     end
