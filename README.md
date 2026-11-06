@@ -28,6 +28,6 @@ graph TD
     B -->|Splits Rewards| E[Operator Wallet]
     E -->|Withdraw| F[External Cash/Mobile Money]
     
-    subgraph "Base Sepolia Testnet"
+    subgraph BaseSepolia [Base Sepolia Testnet]
     B
     end
