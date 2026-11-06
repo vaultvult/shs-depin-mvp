@@ -18,3 +18,10 @@ SHS DePIN is a decentralized physical infrastructure network built on Base. It p
 
 ## 4. Product Design & User Experience
 The frontend is designed with a Web2-like UX to reduce friction for non-crypto-native operators. It features auto-network switching, clear dashboard metrics (Total Energy Generated, Active Devices), and a seamless MetaMask integration for instant withdrawals.
+
+## 5. Addressing the Real-World Asset Challenge
+*   **Asset Tokenization:** We represent each solar infrastructure unit as a unique digital claim on the `EnergyMarket` contract.
+*   **On-Chain Rules:** The contract enforces an `onlyOwner` allowlist for device registration, preventing unauthorized hardware from joining the network.
+*   **Evidence of Backing:** The IoT Oracle (`submitProofOfGeneration`) provides cryptographic attestation that the asset is producing the energy it claims.
+*   **Path Back to Cash:** Operators receive USDC, which can be seamlessly swapped to local fiat or mobile money (e.g., M-Pesa, Paystack) via our planned liquidity partners.
+*   **Regulatory Compliance:** Our target market (Nigeria) is regulated by the **NERC** (Nigerian Electricity Regulatory Commission). By using USDC and KYC'd operators, we align with local financial and energy regulations.
