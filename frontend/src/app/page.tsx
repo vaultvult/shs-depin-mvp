@@ -1,4 +1,5 @@
 'use client';
+import { usePrivy } from '@privy-io/react-auth';
 
 import { useState, useEffect } from 'react';
 import { useAccount, useConnect, useDisconnect, useReadContract, useWriteContract, useSwitchChain } from 'wagmi';
@@ -24,6 +25,7 @@ export default function Home() {
   useEffect(() => setMounted(true), []);
 
   const { address, isConnected, chain } = useAccount();
+  const { login, logout, authenticated, user } = usePrivy();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const { writeContract } = useWriteContract();
@@ -121,13 +123,13 @@ export default function Home() {
       <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-xl font-semibold tracking-tight text-emerald-400">⚡ SHS DePIN Network</h1>
-          {isConnected ? (
+          {authenticated ? (
             <div className="flex items-center gap-4">
-              <span className="text-sm font-mono text-emerald-400">{address?.slice(0, 6)}...{address?.slice(-4)}</span>
-              <button onClick={() => disconnect()} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-4 py-2 rounded-lg">Disconnect</button>
+              <span className="text-sm font-mono text-emerald-400">{user?.wallet?.address?.slice(0, 6)}...{user?.wallet?.address?.slice(-4)}</span>
+              <button onClick={logout} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-4 py-2 rounded-lg">Log Out</button>
             </div>
           ) : (
-            <button onClick={() => connect({ connector: connectors[0] })} className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-4 py-2 rounded-lg">Connect Wallet</button>
+            <button onClick={login} className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-4 py-2 rounded-lg">Login</button>
           )}
         </div>
       </header>
