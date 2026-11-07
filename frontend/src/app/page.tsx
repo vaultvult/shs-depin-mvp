@@ -125,7 +125,7 @@ export default function Home() {
           <h1 className="text-xl font-semibold tracking-tight text-emerald-400">⚡ SHS DePIN Network</h1>
           {authenticated ? (
             <div className="flex items-center gap-4">
-              <span className="text-sm font-mono text-emerald-400">{user?.wallet?.address?.slice(0, 6)}...{user?.wallet?.address?.slice(-4)}</span>
+              <button onClick={() => { navigator.clipboard.writeText(user?.wallet?.address || ""); alert("Address copied to clipboard: " + user?.wallet?.address); }} className="text-sm font-mono text-emerald-400 hover:text-emerald-300 cursor-pointer underline decoration-dotted" title="Click to copy full address">{user?.wallet?.address?.slice(0, 6)}...{user?.wallet?.address?.slice(-4)}(Copy)</button>
               <button onClick={logout} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-4 py-2 rounded-lg">Log Out</button>
             </div>
           ) : (

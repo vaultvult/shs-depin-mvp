@@ -31,3 +31,8 @@ graph TD
     subgraph BaseSepolia [Base Sepolia Testnet]
     B
     end
+
+## 🔐 Seamless Onboarding: Privy Integration (Account Abstraction)
+To meet the "Product Design" criteria and ensure mass adoption in Africa, we integrated **Privy** for Web2-friendly onboarding. 
+* **Crypto-Native Users:** Can seamlessly connect MetaMask or Coinbase Wallet.
+* **Web2 Users:** Can sign up with just an email address. Privy automatically creates a secure, invisible embedded wallet in the background, allowing rural farmers to pay for solar energy without ever knowing they are using a blockchain.
