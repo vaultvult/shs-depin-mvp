@@ -2,7 +2,18 @@
 
 A decentralized physical infrastructure network (DePIN) MVP built for the W3Node Hackathon. This protocol enables peer-to-peer energy trading and incentivization for Solar Home Systems (SHS) in Africa.
 
-> **⚠️ Note for Judges:** The YouTube demo video shows the V1 flow. This repository contains the fully upgraded **V2 RWA-Compliant** architecture, which includes ERC-721 Asset Tokenization, an Operator Allowlist, and a Device Freeze function.
+> **⚠️ Note for Judges:** The YouTube demo video shows the V1 flow. This repository contains the fully upgraded **V2 RWA-Compliant** architecture, which includes ERC-721 Asset Tokenization, an Operator Allowlist, a Device Freeze function, and **Privy integration for invisible wallets**.
+
+## 🔐 Seamless Onboarding (Privy Integration)
+To meet the "Product Design" criteria and ensure mass adoption in Africa, we integrated Privy for Web2-friendly onboarding.
+* **Crypto-Native Users:** Can seamlessly connect MetaMask or Coinbase Wallet.
+* **Web2 Users:** Can sign up with just an email address. Privy automatically creates a secure, invisible embedded wallet in the background.
+
+**Login Modal:**
+![Privy Login](screenshot4.png)
+
+**Logged In (Invisible Wallet Created):**
+![Privy Logged In](screenshot5.png)
 
 ## 📸 Application UI (V2 RWA Flow)
 **1. Admin Setup (Asset Tokenization & Allowlist)**
@@ -31,8 +42,3 @@ graph TD
     subgraph BaseSepolia [Base Sepolia Testnet]
     B
     end
-
-## 🔐 Seamless Onboarding: Privy Integration (Account Abstraction)
-To meet the "Product Design" criteria and ensure mass adoption in Africa, we integrated **Privy** for Web2-friendly onboarding. 
-* **Crypto-Native Users:** Can seamlessly connect MetaMask or Coinbase Wallet.
-* **Web2 Users:** Can sign up with just an email address. Privy automatically creates a secure, invisible embedded wallet in the background, allowing rural farmers to pay for solar energy without ever knowing they are using a blockchain.
