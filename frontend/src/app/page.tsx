@@ -35,7 +35,7 @@ export default function Home() {
     address: MARKET_ADDRESS,
     abi: EnergyMarketABI.abi,
     functionName: 'operatorBalances',
-    args: address ? [address] : undefined,
+    args: user?.wallet?.address ? [user.wallet.address] : undefined,
   });
 
   const { data: contractOwner } = useReadContract({
@@ -46,6 +46,7 @@ export default function Home() {
 
   // Strict boolean check for isOwner
   const isOwner = !!user?.wallet?.address && !!contractOwner && user.wallet.address.toLowerCase() === (contractOwner as string).toLowerCase();
+  console.log("DEBUG:", { privyAddress: user?.wallet?.address, wagmiAddress: address, contractOwner, isOwner });
   useEffect(() => {
     if (!isOwner && activeTab === "admin") {
       setActiveTab("operator");
@@ -76,11 +77,11 @@ export default function Home() {
   };
 
   const handleMintAsset = () => handleTx({
-    address: ASSET_ADDRESS, abi: SolarAssetABI.abi, functionName: 'mintAsset', args: [address, "ipfs://QmMockDocumentHashForLegalDeed"],
+    address: ASSET_ADDRESS, abi: SolarAssetABI.abi, functionName: 'mintAsset', args: [user?.wallet?.address, "ipfs://QmMockDocumentHashForLegalDeed"],
   }, "Asset NFT Minted successfully!");
 
   const handleAllowlist = () => handleTx({
-    address: MARKET_ADDRESS, abi: EnergyMarketABI.abi, functionName: 'setAllowlist', args: [address, true],
+    address: MARKET_ADDRESS, abi: EnergyMarketABI.abi, functionName: 'setAllowlist', args: [user?.wallet?.address, true],
   }, "Operator added to Allowlist!");
 
   const handleRegister = () => handleTx({
