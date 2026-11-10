@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Add this line to satisfy Next.js 16 requirements
+  turbopack: {},
   webpack: (config) => {
     // Tell Webpack to ignore these optional packages by aliasing them to false
     config.resolve.alias = {
