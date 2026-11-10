@@ -45,7 +45,12 @@ export default function Home() {
   });
 
   // Strict boolean check for isOwner
-  const isOwner = !!address && !!contractOwner && address.toLowerCase() === (contractOwner as string).toLowerCase();
+  const isOwner = !!user?.wallet?.address && !!contractOwner && user.wallet.address.toLowerCase() === (contractOwner as string).toLowerCase();
+  useEffect(() => {
+    if (!isOwner && activeTab === "admin") {
+      setActiveTab("operator");
+    }
+  }, [isOwner, activeTab]);
 
   // Contract Writes with Toasts
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
