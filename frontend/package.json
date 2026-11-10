@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node dev.js",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint"
   },
@@ -26,6 +26,7 @@
     "postcss": "^8.5.32",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "sonner": "^2.0.8",
     "viem": "^2.57.11",
     "wagmi": "^3.7.9"
   },
