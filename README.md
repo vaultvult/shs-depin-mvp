@@ -1,5 +1,8 @@
 # SHS DePIN Network
 
+**🔗 Live Deployment:** [https://shs-depin-mvp.vercel.app](https://shs-depin-mvp.vercel.app)
+
+
 A decentralized physical infrastructure network (DePIN) MVP built for the W3Node Hackathon. This protocol enables peer-to-peer energy trading and incentivization for Solar Home Systems (SHS) in Africa.
 
 > **⚠️ Note for Judges:** The YouTube demo video shows the V1 flow. This repository contains the fully upgraded **V2 RWA-Compliant** architecture, which includes ERC-721 Asset Tokenization, an Operator Allowlist, a Device Freeze function, and **Privy integration for invisible wallets**.
