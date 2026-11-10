@@ -233,7 +233,7 @@ export default function Home() {
                     <span className="text-2xl font-mono font-bold text-emerald-400">
                       {operatorBalance ? formatUnits(operatorBalance as bigint, 6) : '0.00'} USDC
                     </span>
-                    <button onClick={handleWithdraw} disabled={isPending || isConfirming || !operatorBalance || operatorBalance === 0n} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg disabled:opacity-50">Withdraw</button>
+                    <button onClick={handleWithdraw} disabled={isPending || isConfirming || !operatorBalance || operatorBalance === BigInt(0)} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg disabled:opacity-50">Withdraw</button>
                   </div>
                 </div>
               </div>
