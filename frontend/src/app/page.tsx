@@ -46,7 +46,6 @@ export default function Home() {
 
   // Strict boolean check for isOwner
   const isOwner = !!user?.wallet?.address && !!contractOwner && user.wallet.address.toLowerCase() === (contractOwner as string).toLowerCase();
-  console.log("DEBUG:", { privyAddress: user?.wallet?.address, wagmiAddress: address, contractOwner, isOwner });
   useEffect(() => {
     if (!isOwner && activeTab === "admin") {
       setActiveTab("operator");
