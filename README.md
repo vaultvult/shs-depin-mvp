@@ -45,3 +45,13 @@ graph TD
     subgraph BaseSepolia [Base Sepolia Testnet]
     B
     end
+
+## 💡 How It Works (The Physical Implementation)
+To understand SHS DePIN, picture a rural home in Nigeria with a **Solar Home System (SHS)** on the roof—a solar panel, a battery, and a smart meter inside the house. 
+
+The **Operator** is the company that paid for the solar panel. The **Consumer** is the family living in the house. Because the family cannot afford the $500 upfront cost, they use a Pay-As-You-Go model facilitated by our protocol:
+
+1. The family logs into our app (using email via Privy) and pays **5 USDC** for 10 kWh of electricity.
+2. The smart contract instantly routes that USDC to the Operator's wallet.
+3. The IoT smart meter (simulated by our Oracle button in the MVP) detects the payment on-chain and unlocks the electricity flow to the house.
+4. **The RWA Angle:** Investors can fund the Operator's solar panels. As the family pays for their daily energy, the USDC micro-payments generate a transparent, real-world yield for the investors.
