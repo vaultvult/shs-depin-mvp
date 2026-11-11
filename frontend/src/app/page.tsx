@@ -148,6 +148,18 @@ export default function Home() {
       </header>
 
       <div className="max-w-6xl mx-auto px-6 py-12">
+              <div className="mb-12 text-center">
+                <h2 className="text-4xl font-extrabold text-white mb-4">Tokenize Solar Energy. Earn Real Yield.</h2>
+                <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                  SHS DePIN turns physical solar panels into ERC-721 Real-World Assets. Operators register hardware, consumers pay in USDC, and revenue is distributed transparently on-chain.
+                </p>
+              </div>
+              <div className="mb-12 text-center">
+                <h2 className="text-4xl font-extrabold text-white mb-4">Tokenize Solar Energy. Earn Real Yield.</h2>
+                <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                  SHS DePIN turns physical solar panels into ERC-721 Real-World Assets. Operators register hardware, consumers pay in USDC, and revenue is distributed transparently on-chain.
+                </p>
+              </div>
         
         {/* 📊 Dynamic Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
