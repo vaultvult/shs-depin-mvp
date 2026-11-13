@@ -25,3 +25,12 @@ The frontend is designed with a Web2-like UX to reduce friction for non-crypto-n
 *   **Evidence of Backing:** The IoT Oracle (`submitProofOfGeneration`) provides cryptographic attestation that the asset is producing the energy it claims.
 *   **Path Back to Cash:** Operators receive USDC, which can be seamlessly swapped to local fiat or mobile money (e.g., M-Pesa, Paystack) via our planned liquidity partners.
 *   **Regulatory Compliance:** Our target market (Nigeria) is regulated by the **NERC** (Nigerian Electricity Regulatory Commission). By using USDC and KYC'd operators, we align with local financial and energy regulations.
+
+## 6. Competitive Landscape
+**1. Traditional PAYG Companies (Sun King, M-KOPA):** 
+These are our biggest Web2 competitors. They provide the physical hardware and mobile money rails. However, they operate as closed, centralized systems. They lack the transparency of on-chain data and do not offer fractional RWA investment to the public. 
+*Our Advantage:* We are an open, auditable protocol. By tokenizing the solar panel as an ERC-721 and using smart contracts for payments, we provide the trust layer that enables fractional investor funding.
+
+**2. Global Web3 DePINs (Arkreen, Glow):**
+These projects focus on global carbon credit generation or large-scale solar farms. 
+*Our Advantage:* We are hyper-local. Our UX is built specifically for the African market (Privy invisible wallets, USDC micro-payments, mobile-money compatibility). We focus on the "Solar Home System" (rooftop panels) rather than massive utility-scale farms, solving the last-mile energy access problem.
