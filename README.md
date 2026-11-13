@@ -40,6 +40,7 @@ To meet the "Product Design" criteria and ensure mass adoption in Africa, we int
 ## 📚 Documentation
 * [Project Concept & Business Model](CONCEPT.md)
 * [Technical Architecture & Security Evidence](TECHNICAL.md)
+* [Pitch, Business Model & Q&A](PITCH_QA.md)
 
 ## 🏗️ Architecture Diagram
 
