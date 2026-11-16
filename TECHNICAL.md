@@ -30,6 +30,6 @@ To meet the strict RWA requirements for the hackathon, the protocol was upgraded
 *   **Asset Tokenization:** An `ERC-721` smart contract (`SolarAsset.sol`) was created to represent ownership of the physical solar panel, linked to a legal document hash.
 *   **On-Chain Rules:** The `EnergyMarket` now enforces an `Allowlist` (only verified operators can register devices) and a `Freeze` function (admin can halt payments if hardware breaks).
 *   **New Deployments (Base Sepolia):**
-    *   MockUSDC: `0x19016bE9467eaF2A394000999c46F4cD032b87a9`
-    *   SolarAsset: `0x25b8130ee2e521C71e578371442135C3C22b832b`
-    *   EnergyMarket: `0xdE2c2d46F22f5a11a127D8EfC5b13c2164dd78e7`
+    *   MockUSDC: `0x36986Ec83648FBc5ad2eFF8d7E0c6488E9195749`
+    *   SolarAsset: `0x895538db3b9c1E74278Df0A3B0f6698f554C896f`
+    *   EnergyMarket: `0x91D52e2d5B7f1D112084E5df0a875A1e18FC3CEE`

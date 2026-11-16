@@ -13,10 +13,10 @@ import MockUSDCABI from '../abis/MockUSDC.json';
 import SolarAssetABI from '../abis/SolarAsset.json';
 import SolarVaultABI from '../abis/SolarVault.json';
 
-const MARKET_ADDRESS = '0xYOUR_NEW_ADDRESS';
-const USDC_ADDRESS = '0x19016bE9467eaF2A394000999c46F4cD032b87a9';
-const ASSET_ADDRESS = '0x25b8130ee2e521C71e578371442135C3C22b832b';
-const VAULT_ADDRESS = '0xf7C7FD03e596EC6C6420938133eFe7647D29a03a';
+const MARKET_ADDRESS = '0x91D52e2d5B7f1D112084E5df0a875A1e18FC3CEE';
+const USDC_ADDRESS = '0x36986Ec83648FBc5ad2eFF8d7E0c6488E9195749';
+const ASSET_ADDRESS = '0x895538db3b9c1E74278Df0A3B0f6698f554C896f';
+const VAULT_ADDRESS = '0xE3062bb0Cc07fAE3E053aBC92cf59EF105bB06B0';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
