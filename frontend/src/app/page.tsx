@@ -10,6 +10,7 @@ import EnergyMarketABI from '../abis/EnergyMarket.json';
 import MockUSDCABI from '../abis/MockUSDC.json';
 import SolarAssetABI from '../abis/SolarAsset.json';
 import SolarVaultABI from '../abis/SolarVault.json';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 // 🚨 NEW ADDRESSES 🚨
 const MARKET_ADDRESS = '0xdE2c2d46F22f5a11a127D8EfC5b13c2164dd78e7';
@@ -26,6 +27,15 @@ export default function Home() {
   const [payAmount, setPayAmount] = useState('');
   const [genAmount, setGenAmount] = useState('');
   const [investAmount, setInvestAmount] = useState('');
+  const mockYieldData = [
+    { day: 'Mon', yield: 0.5 },
+    { day: 'Tue', yield: 0.8 },
+    { day: 'Wed', yield: 1.2 },
+    { day: 'Thu', yield: 1.1 },
+    { day: 'Fri', yield: 1.8 },
+    { day: 'Sat', yield: 2.1 },
+    { day: 'Sun', yield: 2.5 },
+  ];
 
   useEffect(() => setMounted(true), []);
 
@@ -194,6 +204,20 @@ export default function Home() {
                   <div className="flex items-center gap-4">
                     <span className="text-2xl font-mono font-bold text-emerald-400">{operatorBalance ? formatUnits(operatorBalance as bigint, 6) : '0.00'} USDC</span>
                     <button onClick={handleWithdraw} disabled={isPending || isConfirming || !operatorBalance || operatorBalance === BigInt(0)} className="bg-emerald-500 text-black font-semibold px-6 py-2 rounded-lg disabled:opacity-50">Withdraw</button>
+                  </div>
+                </div>
+                <div className="mt-8 bg-gray-950 p-6 rounded-lg border border-gray-800">
+                  <h3 className="text-lg font-bold text-white mb-4">Projected Yield (Last 7 Days)</h3>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={mockYieldData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                        <XAxis dataKey="day" stroke="#9CA3AF" />
+                        <YAxis stroke="#9CA3AF" />
+                        <Tooltip contentStyle={{ backgroundColor: "#111827", borderColor: "#374151", color: "#fff" }} itemStyle={{ color: "#3B82F6" }} />
+                        <Line type="monotone" dataKey="yield" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
               </div>
