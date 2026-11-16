@@ -21,6 +21,7 @@
     "@tailwindcss/postcss": "^4.3.5",
     "@tanstack/react-query": "^5.105.0",
     "accounts": "^0.21.1",
+    "lucide-react": "^1.73.0",
     "next": "16.4.3",
     "node-polyfill-webpack-plugin": "^4.1.0",
     "postcss": "^8.5.32",
