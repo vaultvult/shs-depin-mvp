@@ -13,7 +13,7 @@ import MockUSDCABI from '../abis/MockUSDC.json';
 import SolarAssetABI from '../abis/SolarAsset.json';
 import SolarVaultABI from '../abis/SolarVault.json';
 
-const MARKET_ADDRESS = '0xdE2c2d46F22f5a11a127D8EfC5b13c2164dd78e7';
+const MARKET_ADDRESS = '0xYOUR_NEW_ADDRESS';
 const USDC_ADDRESS = '0x19016bE9467eaF2A394000999c46F4cD032b87a9';
 const ASSET_ADDRESS = '0x25b8130ee2e521C71e578371442135C3C22b832b';
 const VAULT_ADDRESS = '0xf7C7FD03e596EC6C6420938133eFe7647D29a03a';

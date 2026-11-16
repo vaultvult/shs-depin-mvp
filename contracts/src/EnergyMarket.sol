@@ -9,6 +9,8 @@ contract EnergyMarket is Ownable {
     IERC20 public paymentToken;
     IERC721 public solarAssetToken;
     address public yieldVault;
+    address public treasury;
+    uint256 public constant PROTOCOL_FEE_BPS = 150; // 1.5%
     
     struct Device {
         address operator;
@@ -29,10 +31,11 @@ contract EnergyMarket is Ownable {
     event EnergyGenerated(string deviceId, uint256 kwh);
     event PaymentReceived(address payer, string deviceId, uint256 amount);
 
-    constructor(address _paymentToken, address _solarAssetToken, address _yieldVault) Ownable(msg.sender) {
+    constructor(address _paymentToken, address _solarAssetToken, address _yieldVault, address _treasury) Ownable(msg.sender) {
         paymentToken = IERC20(_paymentToken);
         solarAssetToken = IERC721(_solarAssetToken);
         yieldVault = _yieldVault;
+        treasury = _treasury;
     }
 
     function setAllowlist(address _operator, bool _status) external onlyOwner {
@@ -67,16 +70,23 @@ contract EnergyMarket is Ownable {
         Device storage device = devices[_deviceId];
         require(device.isActive, "Device not active");
         require(!device.isFrozen, "Device is frozen");
-        
-        // Split: 90% to Operator, 10% to Investor Vault
-        uint256 investorSplit = (_amount * 10) / 100;
-        uint256 operatorSplit = _amount - investorSplit;
+
+        // 1. Deduct Protocol Fee (1.5%)
+        uint256 protocolFee = (_amount * PROTOCOL_FEE_BPS) / 10000;
+        uint256 remainingAmount = _amount - protocolFee;
+
+        // 2. Split remaining: 90% Operator, 10% Vault
+        uint256 investorSplit = (remainingAmount * 10) / 100;
+        uint256 operatorSplit = remainingAmount - investorSplit;
 
         device.totalRewardsEarned += operatorSplit;
         operatorBalances[device.operator] += operatorSplit;
         
         require(paymentToken.transferFrom(msg.sender, address(this), _amount), "Payment failed");
         
+        if (protocolFee > 0) {
+            require(paymentToken.transfer(treasury, protocolFee), "Treasury transfer failed");
+        }
         if (investorSplit > 0) {
             require(paymentToken.transfer(yieldVault, investorSplit), "Vault transfer failed");
         }

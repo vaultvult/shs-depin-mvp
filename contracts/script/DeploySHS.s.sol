@@ -14,7 +14,7 @@ contract DeploySHS is Script {
         MockUSDC usdc = new MockUSDC();
         SolarAsset asset = new SolarAsset();
         SolarVault vault = new SolarVault(address(usdc));
-        EnergyMarket market = new EnergyMarket(address(usdc), address(asset), address(vault));
+        EnergyMarket market = new EnergyMarket(address(usdc), address(asset), address(vault), msg.sender);
 
         vm.stopBroadcast();
 
